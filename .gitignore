@@ -16,9 +16,10 @@ dist-ssr
 *.db
 *.db-*
 *.sqlite
-*.sqlite-*
-server/data/
-data/
+server/data/*.db*
+server/data/*.sqlite*
+!server/data/.gitkeep
+/data/
 
 # Editor directories and files
 .vscode/*

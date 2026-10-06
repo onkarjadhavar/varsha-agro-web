@@ -1,11 +1,19 @@
 import { DatabaseSync } from "node:sqlite";
 import path from "node:path";
+import fs from "node:fs";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_PATH = path.join(__dirname, "data", "varsha_agro.db");
+const DATA_DIR = path.join(__dirname, "data");
+
+// Ensure the data directory exists before opening SQLite database
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+const DB_PATH = path.join(DATA_DIR, "varsha_agro.db");
 
 // Initialize Database connection
 export const db = new DatabaseSync(DB_PATH);
