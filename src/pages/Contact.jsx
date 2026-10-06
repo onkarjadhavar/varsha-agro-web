@@ -160,13 +160,13 @@ export default function Contact() {
 
               {/* Contact Cards */}
               <div className="space-y-4">
-                {/* Address Card */}
+                {/* Farm Location Card */}
                 <div className="p-5 rounded-2xl bg-white border border-forest/10 shadow-sm flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-forest/5 flex items-center justify-center text-agri shrink-0 mt-0.5">
                     <MapPin className="w-5 h-5 text-gold" />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-bold text-forest">Farm Location</h3>
+                    <h3 className="font-serif text-lg font-bold text-forest">Farm &amp; Production Facility</h3>
                     <p className="text-sm text-charcoal/80 mt-1 leading-relaxed">
                       {COMPANY.contact.address.full}
                     </p>
@@ -176,7 +176,29 @@ export default function Contact() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-agri hover:text-forest mt-2"
                     >
-                      <span>Open in Google Maps</span>
+                      <span>Open Farm on Google Maps</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Egg Shop Card */}
+                <div className="p-5 rounded-2xl bg-white border border-forest/10 shadow-sm flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-forest/5 flex items-center justify-center text-agri shrink-0 mt-0.5">
+                    <MapPin className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-forest">Egg Shop Outlet (Wholesale &amp; Retail)</h3>
+                    <p className="text-sm text-charcoal/80 mt-1 leading-relaxed">
+                      Varsha Agro Egg Shop, Murud, Latur District, Maharashtra – 413510
+                    </p>
+                    <a
+                      href="https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-agri hover:text-forest mt-2"
+                    >
+                      <span>Get Directions to Egg Shop (Murud)</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
@@ -451,15 +473,27 @@ export default function Contact() {
               </p>
             </div>
 
-            <a
-              href={COMPANY.contact.mapDirectionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-forest text-gold text-xs font-semibold hover:bg-forest-light transition-colors shrink-0"
-            >
-              <span>Get Driving Directions</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <a
+                href={COMPANY.contact.mapDirectionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-forest text-gold text-xs font-semibold hover:bg-forest-light transition-colors shrink-0"
+              >
+                <span>Farm (Kalamb) Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href="https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold hover:bg-gold-light text-forest-dark text-xs font-bold transition-colors shrink-0 shadow-sm"
+              >
+                <span>Egg Shop (Murud) Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
           {/* Embedded Google Map */}

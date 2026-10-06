@@ -21,6 +21,7 @@ export const COMPANY = {
     },
     googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121045.24479904297!2d75.95!3d18.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc59434b95d9859%3A0x6e2ef309ef32e56e!2sKalamb%2C%20Maharashtra%20413507!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
     mapDirectionsUrl: "https://maps.google.com/?q=Wathwada,+Kalamb,+Dharashiv,+Maharashtra,+India",
+    eggShopMapUrl: "https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA",
   },
 
   // Document downloads (Placeholder easily replaceable with actual URL)

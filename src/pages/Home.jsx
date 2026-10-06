@@ -338,19 +338,25 @@ export default function Home({ onOpenEnquiry }) {
                 </div>
 
                 {/* CARD 3: MURUD, LATUR */}
-                <div className="p-4 rounded-xl bg-ivory border border-forest/10 shadow-xs flex flex-col justify-between hover:border-gold/40 transition-colors">
-                  <div className="w-9 h-9 rounded-lg bg-forest/5 text-forest flex items-center justify-center mb-3">
+                <a
+                  href="https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-4 rounded-xl bg-ivory border border-forest/10 shadow-xs flex flex-col justify-between hover:border-gold/60 transition-colors group cursor-pointer"
+                  title="Open Egg Shop location in Google Maps"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-forest/5 text-forest group-hover:bg-gold/20 flex items-center justify-center mb-3 transition-colors">
                     <MapPin className="w-4 h-4 text-gold" />
                   </div>
                   <div>
-                    <h4 className="font-serif text-sm font-bold text-forest uppercase tracking-wide">
+                    <h4 className="font-serif text-sm font-bold text-forest uppercase tracking-wide group-hover:text-gold transition-colors">
                       MURUD, LATUR
                     </h4>
                     <p className="text-xs text-charcoal/80 mt-1 leading-snug font-light">
                       Murud, Latur District, Maharashtra – 413510
                     </p>
                   </div>
-                </div>
+                </a>
 
               </div>
 
@@ -369,7 +375,7 @@ export default function Home({ onOpenEnquiry }) {
                     <p>Maharashtra – 413510</p>
                   </div>
                   <a
-                    href="https://maps.google.com/?q=Varsha+Agro+Egg+Shop,+Murud,+Latur,+Maharashtra+413510"
+                    href="https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-forest hover:bg-forest-light text-white text-xs font-semibold uppercase tracking-wider transition-colors shrink-0 shadow-sm"
@@ -393,7 +399,7 @@ export default function Home({ onOpenEnquiry }) {
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-1">
                   <a
-                    href="https://maps.google.com/?q=Varsha+Agro+Egg+Shop,+Murud,+Latur,+Maharashtra+413510"
+                    href="https://maps.app.goo.gl/dTYpuwWmy4fk7GJKA"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-light text-forest-dark font-bold px-7 py-3.5 rounded-full text-xs uppercase tracking-wider shadow-sm transition-all text-center"
