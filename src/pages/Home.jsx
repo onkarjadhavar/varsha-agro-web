@@ -23,6 +23,7 @@ import { COMPANY } from "../data/companyData";
 import { IMAGES, GALLERY_ITEMS } from "../data/images";
 import SectionHeader from "../components/SectionHeader";
 import Lightbox from "../components/Lightbox";
+import SEO from "../components/SEO";
 
 export default function Home({ onOpenEnquiry }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -47,6 +48,12 @@ export default function Home({ onOpenEnquiry }) {
 
   return (
     <div className="overflow-x-hidden">
+      <SEO
+        title="Foods and Feeds | Layer Poultry & Egg Production"
+        description="VARSHA AGRO produces premium table eggs, layer poultry birds, and farm-made poultry feed with sustainable manure utilization in Dharashiv, Maharashtra."
+        canonicalPath="/"
+      />
+
       {/* ==================================================
           5. HERO SECTION (Full-Screen 90–100vh)
           ================================================== */}
@@ -59,6 +66,11 @@ export default function Home({ onOpenEnquiry }) {
           <img
             src={IMAGES.hero}
             alt="Modern layer poultry farm at sunrise in Maharashtra"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width="1376"
+            height="768"
             className="w-full h-full object-cover object-center scale-105 animate-[pulse_10s_ease-in-out_infinite] transition-transform duration-1000 ease-out"
             style={{ animationDuration: "20s" }}
           />

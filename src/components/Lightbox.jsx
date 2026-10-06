@@ -20,6 +20,7 @@ export default function Lightbox({ item, onClose, onNext, onPrev }) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-md animate-in fade-in duration-200"
       onClick={onClose}
       role="dialog"
+      aria-modal="true"
       aria-label="Image Lightbox"
     >
       {/* Close button */}

@@ -17,6 +17,9 @@ import Contact from "./pages/Contact";
 import CompanyProfile from "./pages/CompanyProfile";
 import AdminPortal from "./pages/admin/AdminPortal";
 
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+
 function NotFound() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center pt-24 pb-16 px-4 bg-ivory text-center">
@@ -57,8 +60,8 @@ function AppContent() {
       {/* Main Sticky Header (Hidden on Admin) */}
       {!isAdmin && <Header onOpenEnquiry={handleOpenEnquiry} />}
 
-      {/* Page Viewports */}
-      <main className="flex-1">
+      {/* Page Viewports with bottom padding for mobile sticky bar */}
+      <main className="flex-1 pb-16 md:pb-0">
         <Routes>
           <Route path="/" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/about" element={<About onOpenEnquiry={handleOpenEnquiry} />} />
@@ -68,6 +71,8 @@ function AppContent() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/company-profile" element={<CompanyProfile onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsConditions />} />
           <Route path="/admin" element={<AdminPortal />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

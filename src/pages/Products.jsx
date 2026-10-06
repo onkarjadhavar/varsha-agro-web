@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, AlertCircle, Phone } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 import { IMAGES } from "../data/images";
+import SEO from "../components/SEO";
 
 export default function Products({ onOpenEnquiry }) {
 
@@ -83,12 +84,22 @@ export default function Products({ onOpenEnquiry }) {
 
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="Products | Fresh Table Eggs, Layer Birds & Organic Manure"
+        description="Wholesale fresh table eggs in 30-egg trays, productive cycle layer poultry birds, and bagged organic poultry manure from VARSHA AGRO in Dharashiv."
+        canonicalPath="/products"
+      />
+
       {/* Hero Header */}
       <section className="relative py-20 lg:py-28 bg-forest text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={IMAGES.products.eggs}
             alt="Varsha Agro poultry and agricultural produce"
+            loading="lazy"
+            decoding="async"
+            width="1200"
+            height="896"
             className="w-full h-full object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest/90 to-forest-dark/80"></div>
@@ -148,6 +159,10 @@ export default function Products({ onOpenEnquiry }) {
                     <img
                       src={item.image}
                       alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      width="1200"
+                      height="896"
                       className="w-full h-[360px] sm:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute top-4 left-4">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, Send, CheckCircle2, AlertCircle, Phone, MessageSquare, Tag } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 
@@ -11,30 +11,88 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     quantity: "",
     message: ""
   });
+  const [hpValue, setHpValue] = useState(""); // Honeypot field for anti-spam
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // 'idle' | 'submitting' | 'success' | 'error'
   const [referenceId, setReferenceId] = useState("");
   const [serverError, setServerError] = useState("");
 
+  const modalRef = useRef(null);
+  const firstInputRef = useRef(null);
+
+  // Keyboard accessibility: Escape to close & focus trap
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+
+      // Focus trap
+      if (e.key === "Tab" && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    
+    // Focus first input on open
+    setTimeout(() => {
+      if (firstInputRef.current) {
+        firstInputRef.current.focus();
+      }
+    }, 50);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const validate = () => {
     const errs = {};
-    if (!formData.name.trim()) {
-      errs.name = "Full name is required";
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      errs.name = "Full name is required (minimum 2 characters)";
     }
+    
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required";
-    } else if (!/^[0-9+\-\s()]{8,18}$/.test(formData.phone.trim())) {
-      errs.phone = "Please enter a valid phone number";
+    } else {
+      const cleanPhone = formData.phone.trim().replace(/[\s\-()]/g, "");
+      const isIndian = /^(?:\+91|0)?[6-9]\d{9}$/.test(cleanPhone);
+      const isGeneral = /^\+?[0-9]{8,15}$/.test(cleanPhone);
+      if (!isIndian && !isGeneral) {
+        errs.phone = "Please enter a valid 10-digit mobile number (e.g. 9011601055)";
+      }
     }
+
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       errs.email = "Please enter a valid email address";
     }
+
     if (!formData.interestedIn) {
       errs.interestedIn = "Please select a product or interest area";
     }
+
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -70,7 +128,8 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
           requirement: formData.interestedIn,
           quantity: formData.quantity,
           message: formData.message,
-          source: "Website Modal"
+          source: "Website Modal",
+          b_hp_field: hpValue // Honeypot field
         })
       });
 
@@ -80,11 +139,11 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
         setReferenceId(data.referenceId);
         setStatus("success");
       } else {
-        setServerError(data.error || "Sorry, we couldn't submit your inquiry right now. Please try again.");
+        setServerError(data.error || "Sorry, we could not submit your inquiry right now. Please call or WhatsApp us directly.");
         setStatus("error");
       }
     } catch {
-      setServerError("Sorry, we couldn't submit your inquiry right now. Please try again.");
+      setServerError("Network error. Please check your internet connection or call our farm office directly.");
       setStatus("error");
     }
   };
@@ -94,10 +153,11 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
       name: "",
       phone: "",
       email: "",
-      interestedIn: "Eggs",
+      interestedIn: defaultProduct || "Eggs",
       quantity: "",
       message: ""
     });
+    setHpValue("");
     setErrors({});
     setStatus("idle");
     setReferenceId("");
@@ -111,6 +171,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
+      ref={modalRef}
     >
       <div className="bg-ivory text-charcoal w-full max-w-lg rounded-2xl shadow-2xl border border-forest/10 overflow-hidden relative max-h-[90vh] flex flex-col">
         {/* Header */}
@@ -118,13 +179,13 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
           <button
             onClick={onClose}
             className="absolute top-5 right-5 p-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-gold"
-            aria-label="Close modal"
+            aria-label="Close enquiry modal"
           >
             <X className="w-5 h-5" />
           </button>
 
           <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-light block">
-            VARSHA AGRO • FOODS &amp; FEEDS
+            VARSHA AGRO &bull; FOODS &amp; FEEDS
           </span>
           <h2 id="modal-title" className="font-serif text-2xl font-bold mt-1 text-white">
             Send Business Enquiry
@@ -147,7 +208,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   Thank you for contacting VARSHA AGRO.
                 </h3>
                 <p className="text-sm text-charcoal/85 max-w-sm mx-auto leading-relaxed">
-                  Your inquiry has been received successfully. Our team will review your request.
+                  Your inquiry has been received successfully. Our sales desk will attend to your request promptly.
                 </p>
               </div>
 
@@ -161,7 +222,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   {referenceId || "VA-CONFIRMED"}
                 </div>
                 <span className="text-[11px] text-charcoal/60 mt-1">
-                  Please retain this reference for your records.
+                  Please retain this reference for your trade records.
                 </span>
               </div>
 
@@ -176,10 +237,24 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4 text-left">
+              {/* Invisible Honeypot Anti-Spam Field */}
+              <div style={{ display: "none" }} aria-hidden="true">
+                <label htmlFor="modal-b-hp">Leave this empty</label>
+                <input
+                  type="text"
+                  id="modal-b-hp"
+                  name="b_hp_field"
+                  value={hpValue}
+                  onChange={(e) => setHpValue(e.target.value)}
+                  tabIndex="-1"
+                  autoComplete="off"
+                />
+              </div>
+
               {status === "error" && (
                 <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
                   <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                  <span>{serverError || "Sorry, we couldn't submit your inquiry right now. Please try again."}</span>
+                  <span>{serverError || "Sorry, we could not submit your inquiry right now. Please try again."}</span>
                 </div>
               )}
 
@@ -189,6 +264,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
+                  ref={firstInputRef}
                   type="text"
                   id="modal-name"
                   name="name"
@@ -215,7 +291,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+91 98765 43210"
+                    placeholder="10-digit mobile number"
                     className={`w-full px-3.5 py-2.5 rounded-lg border text-sm bg-white focus:outline-none focus:ring-2 ${
                       errors.phone ? "border-red-400 focus:ring-red-300" : "border-gray-300 focus:ring-gold"
                     }`}
@@ -259,7 +335,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   <option value="Layer Birds">Layer Poultry Birds</option>
                   <option value="Poultry Manure">Poultry Manure (Organic Fertilizer)</option>
                   <option value="Business Enquiry">Business / Partnership Enquiry</option>
-                  <option value="Other">Other</option>
+                  <option value="Other">Other Agricultural Produce</option>
                 </select>
               </div>
 
@@ -307,7 +383,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                 <Phone className="w-3 h-3 text-gold" />
                 <span>{COMPANY.contact.phone}</span>
               </a>
-              <span>•</span>
+              <span>&bull;</span>
               <a href={COMPANY.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#25D366] hover:underline flex items-center gap-1">
                 <MessageSquare className="w-3 h-3" />
                 <span>WhatsApp</span>

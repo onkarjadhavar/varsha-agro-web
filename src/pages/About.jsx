@@ -4,16 +4,27 @@ import { ArrowRight, CheckCircle2, Shield, Sprout, Target } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 import { IMAGES } from "../data/images";
 import SectionHeader from "../components/SectionHeader";
+import SEO from "../components/SEO";
 
 export default function About({ onOpenEnquiry }) {
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="About Us"
+        description="Learn about VARSHA AGRO, an agricultural enterprise in Wathwada, Kalamb, Dharashiv dedicated to disciplined layer poultry farming, hygiene, and bird welfare."
+        canonicalPath="/about"
+      />
+
       {/* Hero Header */}
       <section className="relative py-20 lg:py-28 bg-forest text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={IMAGES.farmAerial}
-            alt="Agricultural farmland in Maharashtra"
+            alt="Agricultural farmland in Dharashiv Maharashtra"
+            loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
             className="w-full h-full object-cover opacity-25"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest/90 to-forest-dark/80"></div>
@@ -84,6 +95,10 @@ export default function About({ onOpenEnquiry }) {
                 <img
                   src={IMAGES.layerShed}
                   alt="Layer poultry farming environment at Varsha Agro"
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="896"
                   className="w-full h-[400px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-transparent to-transparent"></div>

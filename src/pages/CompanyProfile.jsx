@@ -8,9 +8,9 @@ import {
   Printer
 } from "lucide-react";
 import { COMPANY } from "../data/companyData";
+import SEO from "../components/SEO";
 
 export default function CompanyProfile({ onOpenEnquiry }) {
-  // Placeholder PDF URL for company profile document (easily replaced)
   const COMPANY_PROFILE_PDF_URL = COMPANY.profilePdfUrl || "#";
 
   const handleDownload = (e) => {
@@ -21,9 +21,15 @@ export default function CompanyProfile({ onOpenEnquiry }) {
   };
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20">
-      {/* Hero Header */}
-      <section className="relative py-20 lg:py-24 bg-forest text-white overflow-hidden">
+    <div className="pt-24 sm:pt-28 pb-20 print:p-0 print:m-0">
+      <SEO
+        title="Company Profile & Corporate Dossier"
+        description="Executive summary and printable corporate dossier of VARSHA AGRO: enterprise background, poultry operations, produce range, and farming principles."
+        canonicalPath="/company-profile"
+      />
+
+      {/* Hero Header (Hidden in Print) */}
+      <section className="relative py-20 lg:py-24 bg-forest text-white overflow-hidden print:hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4">
             <span className="text-xs sm:text-sm font-bold tracking-[0.25em] uppercase text-gold">
@@ -59,8 +65,8 @@ export default function CompanyProfile({ onOpenEnquiry }) {
         </div>
       </section>
 
-      {/* Breadcrumb */}
-      <div className="bg-ivory border-b border-forest/10 py-3">
+      {/* Breadcrumb (Hidden in Print) */}
+      <div className="bg-ivory border-b border-forest/10 py-3 print:hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-charcoal/70 flex items-center gap-2">
           <Link to="/" className="hover:text-forest">Home</Link>
           <span>/</span>
@@ -69,12 +75,26 @@ export default function CompanyProfile({ onOpenEnquiry }) {
       </div>
 
       {/* Document Content Sheet */}
-      <section className="py-16 bg-ivory">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-8 sm:p-12 lg:p-16 border border-forest/15 shadow-card space-y-12">
+      <section className="py-16 bg-ivory print:py-0 print:bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 print:p-0 print:max-w-none">
+          <div className="bg-white rounded-3xl p-8 sm:p-12 lg:p-16 border border-forest/15 shadow-card space-y-12 print:shadow-none print:border-none print:p-0 print:space-y-8">
             
+            {/* Print-Only Header Banner */}
+            <div className="hidden print:block border-b-2 border-forest pb-4 mb-6">
+              <div className="flex justify-between items-end">
+                <div>
+                  <h1 className="font-serif text-3xl font-bold text-forest">VARSHA AGRO</h1>
+                  <p className="text-xs uppercase tracking-widest text-agri font-semibold">Foods and Feeds &bull; Official Enterprise Dossier</p>
+                </div>
+                <div className="text-right text-[11px] text-charcoal/80">
+                  <p>Wathwada, Taluka Kalamb, Dist. Dharashiv, Maharashtra</p>
+                  <p>Helpline: +91 90116 01055 | Email: contact@varshaagro.com</p>
+                </div>
+              </div>
+            </div>
+
             {/* Header of the Dossier */}
-            <div className="border-b border-forest/15 pb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div className="border-b border-forest/15 pb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 print:pb-4">
               <div>
                 <span className="text-xs font-bold uppercase tracking-[0.25em] text-gold block">
                   CORPORATE SUMMARY
@@ -95,7 +115,7 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 1: Who We Are */}
-            <div className="space-y-4">
+            <div className="space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 1. Who We Are
               </h3>
@@ -108,33 +128,33 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 2: Our Business */}
-            <div className="space-y-4">
+            <div className="space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 2. Our Business Operations
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2">
+                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2 print:border print:border-gray-200">
                   <h4 className="font-bold text-forest text-sm">Layer Poultry Husbandry</h4>
                   <p className="text-xs text-charcoal/80 leading-relaxed font-light">
                     Hygienic housing, fresh water delivery, and daily health observation for commercial layer birds.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2">
+                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2 print:border print:border-gray-200">
                   <h4 className="font-bold text-forest text-sm">Table Egg Production</h4>
                   <p className="text-xs text-charcoal/80 leading-relaxed font-light">
                     Daily morning egg collection, grading, and secure pulp tray packing for wholesale distribution.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2">
+                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2 print:border print:border-gray-200">
                   <h4 className="font-bold text-forest text-sm">Farm-Prepared Feed</h4>
                   <p className="text-xs text-charcoal/80 leading-relaxed font-light">
                     Nutritionally balanced rations prepared exclusively for our flock using yellow maize, grains, and soya meal.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2">
+                <div className="p-4 rounded-xl bg-ivory border border-forest/10 space-y-2 print:border print:border-gray-200">
                   <h4 className="font-bold text-forest text-sm">Agricultural Manure</h4>
                   <p className="text-xs text-charcoal/80 leading-relaxed font-light">
                     Regular shed collection, curing, and bagging of organic poultry manure for regional crop soils.
@@ -144,13 +164,13 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 3: Our Products */}
-            <div className="space-y-4">
+            <div className="space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 3. Primary Products
               </h3>
               <div className="space-y-3">
-                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4">
-                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5"></div>
+                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4 print:border-gray-200">
+                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5 print:hidden"></div>
                   <div>
                     <h4 className="font-bold text-forest text-sm">Fresh Table Eggs</h4>
                     <p className="text-xs text-charcoal/80 mt-1 leading-relaxed">
@@ -159,8 +179,8 @@ export default function CompanyProfile({ onOpenEnquiry }) {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4">
-                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5"></div>
+                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4 print:border-gray-200">
+                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5 print:hidden"></div>
                   <div>
                     <h4 className="font-bold text-forest text-sm">Layer Poultry Birds</h4>
                     <p className="text-xs text-charcoal/80 mt-1 leading-relaxed">
@@ -169,8 +189,8 @@ export default function CompanyProfile({ onOpenEnquiry }) {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4">
-                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5"></div>
+                <div className="p-4 rounded-xl bg-white border border-forest/15 flex items-start gap-4 print:border-gray-200">
+                  <div className="w-2.5 h-2.5 rounded-full bg-gold shrink-0 mt-1.5 print:hidden"></div>
                   <div>
                     <h4 className="font-bold text-forest text-sm">Bagged Poultry Manure</h4>
                     <p className="text-xs text-charcoal/80 mt-1 leading-relaxed">
@@ -182,7 +202,7 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 4: Farming Practices & Approach */}
-            <div className="space-y-4">
+            <div className="space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 4. Farming Practices &amp; Approach
               </h3>
@@ -192,13 +212,13 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 5: Core Values */}
-            <div className="space-y-4">
+            <div className="space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 5. Core Corporate Values
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {COMPANY.values.map((val, idx) => (
-                  <div key={idx} className="p-3.5 rounded-lg bg-ivory border border-forest/10">
+                  <div key={idx} className="p-3.5 rounded-lg bg-ivory border border-forest/10 print:border-gray-200">
                     <span className="font-bold text-forest text-sm block">{val.title}</span>
                     <span className="text-xs text-charcoal/80 font-light mt-0.5 block">{val.description}</span>
                   </div>
@@ -207,7 +227,7 @@ export default function CompanyProfile({ onOpenEnquiry }) {
             </div>
 
             {/* Section 6: Contact & Verification */}
-            <div className="border-t border-forest/15 pt-8 space-y-4">
+            <div className="border-t border-forest/15 pt-8 space-y-4 print:break-inside-avoid">
               <h3 className="font-serif text-2xl font-bold text-forest">
                 6. Contact &amp; Farm Location
               </h3>
@@ -231,8 +251,8 @@ export default function CompanyProfile({ onOpenEnquiry }) {
               </div>
             </div>
 
-            {/* Action Bar */}
-            <div className="pt-6 border-t border-forest/15 flex flex-col sm:flex-row items-center justify-between gap-4">
+            {/* Action Bar (Hidden in Print) */}
+            <div className="pt-6 border-t border-forest/15 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden">
               <button
                 onClick={() => onOpenEnquiry && onOpenEnquiry("Business Enquiry")}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-light text-forest-dark font-bold px-8 py-3.5 rounded-full text-xs uppercase tracking-wider shadow-sm transition-all"

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { IMAGES } from "../data/images";
 import SectionHeader from "../components/SectionHeader";
+import SEO from "../components/SEO";
 
 export default function OurFarm({ onOpenEnquiry }) {
   const farmPillars = [
@@ -85,12 +86,22 @@ export default function OurFarm({ onOpenEnquiry }) {
 
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="Our Farm & Facilities"
+        description="Explore VARSHA AGRO's modern layer poultry sheds, automated watering, in-house feed milling, and biosecure operations in Wathwada, Kalamb."
+        canonicalPath="/farm"
+      />
+
       {/* Hero Section */}
       <section className="relative py-20 lg:py-28 bg-forest text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={IMAGES.hero}
-            alt="Varsha Agro modern poultry farm compound"
+            alt="Varsha Agro modern poultry farm compound in Dharashiv"
+            loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
             className="w-full h-full object-cover opacity-25"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest/90 to-forest-dark/80"></div>
@@ -266,6 +277,10 @@ export default function OurFarm({ onOpenEnquiry }) {
                 <img
                   src={IMAGES.eggOperations}
                   alt="Daily egg sorting and tray packing at Varsha Agro"
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="896"
                   className="w-full h-[360px] object-cover"
                 />
               </div>

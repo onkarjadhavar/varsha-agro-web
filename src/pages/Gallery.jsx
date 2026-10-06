@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Eye, Filter } from "lucide-react";
 import { GALLERY_ITEMS } from "../data/images";
 import Lightbox from "../components/Lightbox";
+import SEO from "../components/SEO";
 
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("ALL");
@@ -36,6 +37,11 @@ export default function Gallery() {
 
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="Farm Gallery | Poultry Operations & Facilities"
+        description="View authentic photos of VARSHA AGRO: layer poultry sheds, white birds, egg sorting and packing, feed milling, and farm manure in Dharashiv."
+        canonicalPath="/gallery"
+      />
       {/* Hero Header */}
       <section className="relative py-20 lg:py-24 bg-forest text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,6 +112,9 @@ export default function Gallery() {
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
+                    decoding="async"
+                    width="1200"
+                    height="896"
                   />
                   {/* Category Pill */}
                   <div className="absolute top-4 left-4 z-10">

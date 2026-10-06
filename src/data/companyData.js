@@ -9,8 +9,8 @@ export const COMPANY = {
     phoneDisplay: "+91 90116 01055",
     phoneHref: "tel:+919011601055",
     whatsappHref: "https://wa.me/919011601055?text=Hello%20VARSHA%20AGRO%2C%20I%20would%20like%20to%20enquire%20about%20your%20products.",
-    email: "baba.bondar@gmail.com",
-    emailHref: "mailto:baba.bondar@gmail.com",
+    email: "contact@varshaagro.com",
+    emailHref: "mailto:contact@varshaagro.com",
     address: {
       village: "Wathwada",
       taluka: "Tq. Kalamb",

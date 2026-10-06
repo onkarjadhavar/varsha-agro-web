@@ -4,16 +4,27 @@ import { ArrowRight, Recycle, Leaf, Sprout, CheckCircle2 } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 import { IMAGES } from "../data/images";
 import SectionHeader from "../components/SectionHeader";
+import SEO from "../components/SEO";
 
 export default function Sustainability({ onOpenEnquiry }) {
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="Sustainability & Manure Utilization"
+        description="Discover how VARSHA AGRO connects layer poultry farming with regional soil rejuvenation through organic poultry manure in Maharashtra."
+        canonicalPath="/sustainability"
+      />
+
       {/* Hero Header */}
       <section className="relative py-20 lg:py-28 bg-forest text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={IMAGES.landscapeBreak}
             alt="Agricultural landscape and crop fields at Varsha Agro"
+            loading="lazy"
+            decoding="async"
+            width="1376"
+            height="768"
             className="w-full h-full object-cover opacity-25"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest-dark via-forest/90 to-forest-dark/80"></div>

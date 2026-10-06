@@ -64,3 +64,49 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Print Stylesheet for Corporate Dossier & PDF Export */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm 1.2cm 1.5cm 1.2cm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Hide interactive chrome */
+  #site-header,
+  #main-footer,
+  #mobile-sticky-action-bar,
+  .print\:hidden,
+  button:not(.print\:show) {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Avoid orphaned headings and fragmented cards */
+  .print\:break-inside-avoid,
+  section,
+  h2,
+  h3 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    color: #123B2A !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+}

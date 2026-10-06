@@ -16,7 +16,8 @@ import {
   Activity,
   Layers,
   ArrowUpDown,
-  ArrowLeft
+  ArrowLeft,
+  Download
 } from "lucide-react";
 
 export default function AdminDashboard({ user, token, onLogout }) {
@@ -43,50 +44,56 @@ export default function AdminDashboard({ user, token, onLogout }) {
     };
   }, [token]);
 
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const fetchData = useCallback(() => setRefreshTrigger((k) => k + 1), []);
+
   // Fetch inquiries & stats
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    setErrorMessage("");
-
-    try {
-      // Build query string
-      const params = new URLSearchParams();
-      if (search.trim()) params.append("search", search.trim());
-      if (selectedStatus !== "ALL") params.append("status", selectedStatus);
-
-      const [inquiriesRes, statsRes] = await Promise.all([
-        fetch(`/api/admin/inquiries?${params.toString()}`, {
-          headers: authHeader()
-        }),
-        fetch("/api/admin/stats", {
-          headers: authHeader()
-        })
-      ]);
-
-      if (inquiriesRes.status === 401 || statsRes.status === 401) {
-        onLogout();
-        return;
-      }
-
-      const inquiriesData = await inquiriesRes.json();
-      const statsData = await statsRes.json();
-
-      if (inquiriesData.success) {
-        setInquiries(inquiriesData.inquiries || []);
-      }
-      if (statsData.success) {
-        setStats(statsData.stats);
-      }
-    } catch {
-      setErrorMessage("Could not load dashboard data from server.");
-    } finally {
-      setLoading(false);
-    }
-  }, [search, selectedStatus, authHeader, onLogout]);
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    let ignore = false;
+
+    const load = async () => {
+      try {
+        const params = new URLSearchParams();
+        if (search.trim()) params.append("search", search.trim());
+        if (selectedStatus !== "ALL") params.append("status", selectedStatus);
+
+        const [inquiriesRes, statsRes] = await Promise.all([
+          fetch(`/api/admin/inquiries?${params.toString()}`, { headers: authHeader() }),
+          fetch("/api/admin/stats", { headers: authHeader() })
+        ]);
+
+        if (inquiriesRes.status === 401 || statsRes.status === 401) {
+          onLogout();
+          return;
+        }
+
+        const inquiriesData = await inquiriesRes.json();
+        const statsData = await statsRes.json();
+
+        if (!ignore) {
+          if (inquiriesData.success) {
+            setInquiries(inquiriesData.inquiries || []);
+          }
+          if (statsData.success && statsData.stats) {
+            setStats(statsData.stats);
+          }
+        }
+      } catch {
+        if (!ignore) {
+          setErrorMessage("Could not load dashboard data from server.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => {
+      ignore = true;
+    };
+  }, [search, selectedStatus, refreshTrigger, authHeader, onLogout]);
 
   // Update status handler
   const handleStatusChange = async (id, newStatus) => {
@@ -156,6 +163,27 @@ export default function AdminDashboard({ user, token, onLogout }) {
       alert("Failed to delete inquiry.");
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  // Export CSV handler
+  const handleExportCSV = async () => {
+    try {
+      const res = await fetch("/api/admin/export/csv", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error("Export failed");
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `varsha_agro_leads_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Failed to export inquiries: " + e.message);
     }
   };
 
@@ -235,6 +263,15 @@ export default function AdminDashboard({ user, token, onLogout }) {
               <ArrowLeft className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">WEBSITE</span>
             </Link>
+
+            <button
+              onClick={handleExportCSV}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-gold hover:bg-gold-light text-forest-dark text-xs font-bold transition-all shadow-sm"
+              title="Download all leads as CSV spreadsheet"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">EXPORT CSV</span>
+            </button>
 
             <button
               onClick={fetchData}

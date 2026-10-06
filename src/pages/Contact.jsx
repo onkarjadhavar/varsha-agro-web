@@ -12,6 +12,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { COMPANY } from "../data/companyData";
+import SEO from "../components/SEO";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ export default function Contact() {
     interestedIn: "Eggs",
     message: ""
   });
+  const [hpValue, setHpValue] = useState(""); // Honeypot anti-spam
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // 'idle' | 'submitting' | 'success' | 'error'
@@ -29,13 +31,18 @@ export default function Contact() {
 
   const validate = () => {
     const errs = {};
-    if (!formData.name.trim()) {
-      errs.name = "Full name is required";
+    if (!formData.name.trim() || formData.name.trim().length < 2) {
+      errs.name = "Full name is required (minimum 2 characters)";
     }
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required";
-    } else if (!/^[0-9+\-\s]{8,15}$/.test(formData.phone.trim())) {
-      errs.phone = "Please enter a valid phone number";
+    } else {
+      const cleanPhone = formData.phone.trim().replace(/[\s\-()]/g, "");
+      const isIndian = /^(?:\+91|0)?[6-9]\d{9}$/.test(cleanPhone);
+      const isGeneral = /^\+?[0-9]{8,15}$/.test(cleanPhone);
+      if (!isIndian && !isGeneral) {
+        errs.phone = "Please enter a valid 10-digit mobile number (e.g. 9011601055)";
+      }
     }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       errs.email = "Please enter a valid email address";
@@ -77,7 +84,8 @@ export default function Contact() {
           email: formData.email,
           requirement: formData.interestedIn,
           message: formData.message,
-          source: "Contact Page Form"
+          source: "Contact Page Form",
+          b_hp_field: hpValue
         })
       });
 
@@ -87,11 +95,11 @@ export default function Contact() {
         setReferenceId(data.referenceId);
         setStatus("success");
       } else {
-        setServerError(data.error || "Sorry, we couldn't submit your inquiry right now. Please try again.");
+        setServerError(data.error || "Sorry, we could not submit your inquiry right now. Please try again.");
         setStatus("error");
       }
     } catch {
-      setServerError("Sorry, we couldn't submit your inquiry right now. Please try again.");
+      setServerError("Network error. Please check your internet connection or call our farm office directly.");
       setStatus("error");
     }
   };
@@ -104,6 +112,7 @@ export default function Contact() {
       interestedIn: "Eggs",
       message: ""
     });
+    setHpValue("");
     setErrors({});
     setStatus("idle");
     setReferenceId("");
@@ -112,6 +121,11 @@ export default function Contact() {
 
   return (
     <div className="pt-24 sm:pt-28 pb-20">
+      <SEO
+        title="Contact Farm Management & Sales"
+        description="Get in touch with VARSHA AGRO in Kalamb, Dharashiv. Direct phone, WhatsApp, email, and Google Maps directions to farm and Murud egg shop."
+        canonicalPath="/contact"
+      />
       {/* Hero Header */}
       <section className="relative py-20 lg:py-24 bg-forest text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -328,10 +342,24 @@ export default function Contact() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate className="space-y-5 mt-8 text-left">
+                    {/* Invisible Honeypot Anti-Spam Field */}
+                    <div style={{ display: "none" }} aria-hidden="true">
+                      <label htmlFor="contact-b-hp">Leave this empty</label>
+                      <input
+                        type="text"
+                        id="contact-b-hp"
+                        name="b_hp_field"
+                        value={hpValue}
+                        onChange={(e) => setHpValue(e.target.value)}
+                        tabIndex="-1"
+                        autoComplete="off"
+                      />
+                    </div>
+
                     {status === "error" && (
                       <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
                         <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                        <span>{serverError || "Sorry, we couldn't submit your inquiry right now. Please try again."}</span>
+                        <span>{serverError || "Sorry, we could not submit your inquiry right now. Please try again."}</span>
                       </div>
                     )}
 
