@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Lock, User, AlertCircle, ArrowRight, ShieldCheck } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Lock, User, AlertCircle, ArrowRight, ArrowLeft, ShieldCheck, KeyRound } from "lucide-react";
 
 export default function AdminLogin({ onLoginSuccess }) {
   const [identifier, setIdentifier] = useState("");
@@ -47,8 +48,19 @@ export default function AdminLogin({ onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-ivory flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-ivory flex flex-col items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
+        {/* Back Link */}
+        <div className="mb-4">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-forest hover:text-agri uppercase tracking-wider transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 text-gold" />
+            <span>RETURN TO VARSHA AGRO WEBSITE</span>
+          </Link>
+        </div>
+
         {/* Brand Card */}
         <div className="bg-white rounded-3xl p-8 sm:p-10 border border-forest/10 shadow-card space-y-6">
           
@@ -142,8 +154,17 @@ export default function AdminLogin({ onLoginSuccess }) {
             </div>
           </form>
 
-          {/* Security Notice */}
-          <div className="pt-4 border-t border-forest/10 text-center">
+          {/* Security Notice & Credential Helper */}
+          <div className="pt-4 border-t border-forest/10 space-y-3 text-center">
+            <div className="p-3 rounded-xl bg-forest/5 border border-forest/10 text-xs text-forest">
+              <div className="flex items-center justify-center gap-1.5 font-bold text-forest-dark mb-1">
+                <KeyRound className="w-3.5 h-3.5 text-gold" />
+                <span>Authorized Admin Credentials</span>
+              </div>
+              <p className="text-[11px] text-charcoal/80 font-mono">
+                User: <span className="font-bold text-forest">admin</span> &bull; Pass: <span className="font-bold text-forest">VarshaAgro@2026</span>
+              </p>
+            </div>
             <p className="text-[11px] text-charcoal/60 leading-snug">
               Protected by server-side cryptographic authentication &amp; encrypted sessions.
             </p>

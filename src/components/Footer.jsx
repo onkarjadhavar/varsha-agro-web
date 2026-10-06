@@ -167,6 +167,14 @@ export default function Footer({ onOpenEnquiry }) {
             </div>
 
             <div className="flex items-center gap-6">
+              <Link
+                to="/admin"
+                className="hover:text-gold text-gold/90 transition-colors uppercase tracking-wider font-semibold flex items-center gap-1.5"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ADMIN LOGIN</span>
+              </Link>
+              <span>•</span>
               <button
                 onClick={() => setModalType("privacy")}
                 className="hover:text-gold transition-colors underline-offset-4 hover:underline"

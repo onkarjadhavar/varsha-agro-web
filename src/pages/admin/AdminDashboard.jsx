@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
   Search,
   RefreshCw,
@@ -14,7 +15,8 @@ import {
   PhoneCall,
   Activity,
   Layers,
-  ArrowUpDown
+  ArrowUpDown,
+  ArrowLeft
 } from "lucide-react";
 
 export default function AdminDashboard({ user, token, onLogout }) {
@@ -218,12 +220,21 @@ export default function AdminDashboard({ user, token, onLogout }) {
             </div>
           </div>
 
-          {/* Right actions: User & Logout */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:block text-right text-xs">
+          {/* Right actions: User, View Site & Logout */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="hidden md:block text-right text-xs">
               <span className="text-gray-300 block">Logged in as:</span>
               <span className="font-semibold text-gold">{user?.username || "admin"}</span>
             </div>
+
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-forest/80 hover:bg-forest text-gold hover:text-gold-light border border-gold/30 text-xs font-semibold transition-colors"
+              title="Return to public website"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">WEBSITE</span>
+            </Link>
 
             <button
               onClick={fetchData}

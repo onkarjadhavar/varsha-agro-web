@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Menu, X, ArrowRight, Phone, MessageSquare } from "lucide-react";
+import { Menu, X, ArrowRight, Phone, MessageSquare, ShieldCheck } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 
 export default function Header({ onOpenEnquiry }) {
@@ -133,6 +133,19 @@ export default function Header({ onOpenEnquiry }) {
               <span>{COMPANY.contact.phoneDisplay}</span>
             </a>
 
+            <Link
+              to="/admin"
+              className={`inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider py-2 px-3 rounded-full border transition-all ${
+                isTransparent
+                  ? "border-white/30 text-white/90 hover:border-gold hover:text-gold hover:bg-white/10"
+                  : "border-forest/20 text-forest hover:border-forest hover:bg-forest/5"
+              }`}
+              title="Varsha Agro Admin Portal"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-gold" />
+              <span>ADMIN</span>
+            </Link>
+
             <button
               id="header-enquire-cta"
               onClick={() => onOpenEnquiry && onOpenEnquiry()}
@@ -220,6 +233,15 @@ export default function Header({ onOpenEnquiry }) {
                 <span>ENQUIRE NOW</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
+
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 bg-forest text-gold border border-gold/30 py-3 rounded-lg font-bold text-xs tracking-wider uppercase mt-2"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>ADMIN LOGIN</span>
+              </Link>
             </div>
           </div>
         </div>

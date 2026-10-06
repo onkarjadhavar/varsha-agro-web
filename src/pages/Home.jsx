@@ -114,8 +114,24 @@ export default function Home({ onOpenEnquiry }) {
         </div>
 
         {/* Subtle Information Strip at bottom */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-12">
-          <div className="pt-6 border-t border-white/15">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8 sm:mt-12">
+          {/* Admin Login Button above horizontal line */}
+          <div className="flex items-center justify-between pb-3.5">
+            <div className="hidden sm:flex items-center gap-2 text-xs text-white/70 font-light">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
+              <span>Direct Farm &amp; Egg Production Facility • Kalamb, Maharashtra</span>
+            </div>
+            <Link
+              to="/admin"
+              id="hero-admin-login-btn"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-forest-dark/90 hover:bg-gold text-gold hover:text-forest-dark border border-gold/50 hover:border-gold shadow-md backdrop-blur-md text-xs font-bold tracking-widest uppercase transition-all duration-300 transform hover:-translate-y-0.5 ml-auto sm:ml-0 group"
+            >
+              <ShieldCheck className="w-4 h-4 text-gold group-hover:text-forest-dark transition-colors" />
+              <span>ADMIN LOGIN</span>
+            </Link>
+          </div>
+
+          <div className="pt-5 border-t border-white/15">
             <div className="flex flex-wrap items-center justify-between gap-y-3 text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-gold-muted/90">
               <span className="hover:text-gold transition-colors">LAYER POULTRY</span>
               <span className="text-gold/50 hidden sm:inline">•</span>
