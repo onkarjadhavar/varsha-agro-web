@@ -119,37 +119,24 @@ export default function Header({ onOpenEnquiry }) {
           </nav>
 
           {/* Right side CTA & Contact */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-5">
             <a
               href={COMPANY.contact.phoneHref}
-              className={`flex items-center gap-1.5 text-xs font-semibold tracking-wider transition-colors py-1.5 px-2.5 rounded-full ${
+              className={`flex items-center gap-2 text-xs font-semibold tracking-wider whitespace-nowrap shrink-0 transition-colors py-2 px-3.5 rounded-full ${
                 isTransparent
-                  ? "text-white/90 hover:text-gold"
+                  ? "text-white/95 hover:text-gold hover:bg-white/10"
                   : "text-agri hover:text-forest hover:bg-forest/5"
               }`}
               title="Call Varsha Agro"
             >
-              <Phone className="w-3.5 h-3.5 text-gold" />
-              <span>{COMPANY.contact.phoneDisplay}</span>
+              <Phone className="w-3.5 h-3.5 text-gold shrink-0" />
+              <span className="whitespace-nowrap font-medium tracking-normal">+91&nbsp;9011601055</span>
             </a>
-
-            <Link
-              to="/admin"
-              className={`inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider py-2 px-3 rounded-full border transition-all ${
-                isTransparent
-                  ? "border-white/30 text-white/90 hover:border-gold hover:text-gold hover:bg-white/10"
-                  : "border-forest/20 text-forest hover:border-forest hover:bg-forest/5"
-              }`}
-              title="Varsha Agro Admin Portal"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-gold" />
-              <span>ADMIN</span>
-            </Link>
 
             <button
               id="header-enquire-cta"
               onClick={() => onOpenEnquiry && onOpenEnquiry()}
-              className="group inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-forest-dark px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase shadow-sm hover:shadow-glow-gold transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+              className="group inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-forest-dark px-5 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase shadow-sm hover:shadow-glow-gold transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 shrink-0 whitespace-nowrap"
             >
               <span>ENQUIRE NOW</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />

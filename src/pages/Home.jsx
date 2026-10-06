@@ -115,16 +115,21 @@ export default function Home({ onOpenEnquiry }) {
 
         {/* Subtle Information Strip at bottom */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8 sm:mt-12">
-          {/* Admin Login Button above horizontal line */}
-          <div className="flex items-center justify-between pb-3.5">
-            <div className="hidden sm:flex items-center gap-2 text-xs text-white/70 font-light">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse"></span>
-              <span>Direct Farm &amp; Egg Production Facility • Kalamb, Maharashtra</span>
-            </div>
+          {/* Contact & Admin Login Row above horizontal line */}
+          <div className="flex items-center justify-between pb-3.5 gap-4">
+            <a
+              href={COMPANY.contact.phoneHref}
+              className="inline-flex items-center gap-2 text-xs font-semibold text-white/90 hover:text-gold transition-colors py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 whitespace-nowrap shrink-0"
+              title="Call Varsha Agro Direct Farm"
+            >
+              <Phone className="w-3.5 h-3.5 text-gold shrink-0" />
+              <span className="whitespace-nowrap font-medium tracking-normal">+91&nbsp;9011601055</span>
+            </a>
+
             <Link
               to="/admin"
               id="hero-admin-login-btn"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-forest-dark/90 hover:bg-gold text-gold hover:text-forest-dark border border-gold/50 hover:border-gold shadow-md backdrop-blur-md text-xs font-bold tracking-widest uppercase transition-all duration-300 transform hover:-translate-y-0.5 ml-auto sm:ml-0 group"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-forest-dark/90 hover:bg-gold text-gold hover:text-forest-dark border border-gold/50 hover:border-gold shadow-md backdrop-blur-md text-xs font-bold tracking-widest uppercase transition-all duration-300 transform hover:-translate-y-0.5 group shrink-0 whitespace-nowrap"
             >
               <ShieldCheck className="w-4 h-4 text-gold group-hover:text-forest-dark transition-colors" />
               <span>ADMIN LOGIN</span>

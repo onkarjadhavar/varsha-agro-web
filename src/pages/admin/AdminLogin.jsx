@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, User, AlertCircle, ArrowRight, ArrowLeft, ShieldCheck, KeyRound } from "lucide-react";
+import { Lock, User, AlertCircle, ArrowRight, ArrowLeft, ShieldCheck } from "lucide-react";
 
 export default function AdminLogin({ onLoginSuccess }) {
   const [identifier, setIdentifier] = useState("");
@@ -107,7 +107,7 @@ export default function AdminLogin({ onLoginSuccess }) {
                   id="admin-username"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="admin or baba.bondar@gmail.com"
+                  placeholder="Enter username or email"
                   className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 text-sm bg-ivory/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold"
                   required
                 />
@@ -154,17 +154,8 @@ export default function AdminLogin({ onLoginSuccess }) {
             </div>
           </form>
 
-          {/* Security Notice & Credential Helper */}
-          <div className="pt-4 border-t border-forest/10 space-y-3 text-center">
-            <div className="p-3 rounded-xl bg-forest/5 border border-forest/10 text-xs text-forest">
-              <div className="flex items-center justify-center gap-1.5 font-bold text-forest-dark mb-1">
-                <KeyRound className="w-3.5 h-3.5 text-gold" />
-                <span>Authorized Admin Credentials</span>
-              </div>
-              <p className="text-[11px] text-charcoal/80 font-mono">
-                User: <span className="font-bold text-forest">admin</span> &bull; Pass: <span className="font-bold text-forest">VarshaAgro@2026</span>
-              </p>
-            </div>
+          {/* Security Notice */}
+          <div className="pt-4 border-t border-forest/10 text-center">
             <p className="text-[11px] text-charcoal/60 leading-snug">
               Protected by server-side cryptographic authentication &amp; encrypted sessions.
             </p>
