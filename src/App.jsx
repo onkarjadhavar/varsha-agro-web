@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import MobileStickyBar from "./components/MobileStickyBar";
@@ -15,6 +15,7 @@ import Sustainability from "./pages/Sustainability";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
 import CompanyProfile from "./pages/CompanyProfile";
+import AdminPortal from "./pages/admin/AdminPortal";
 
 function NotFound() {
   return (
@@ -40,9 +41,11 @@ function NotFound() {
   );
 }
 
-export default function App() {
+function AppContent() {
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [enquiryDefaultCategory, setEnquiryDefaultCategory] = useState("Eggs");
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
 
   const handleOpenEnquiry = (category = "Eggs") => {
     setEnquiryDefaultCategory(category);
@@ -50,40 +53,48 @@ export default function App() {
   };
 
   return (
+    <div className="min-h-screen flex flex-col bg-ivory text-charcoal font-sans antialiased selection:bg-gold selection:text-forest-dark">
+      {/* Main Sticky Header (Hidden on Admin) */}
+      {!isAdmin && <Header onOpenEnquiry={handleOpenEnquiry} />}
+
+      {/* Page Viewports */}
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/about" element={<About onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/farm" element={<OurFarm onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/products" element={<Products onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/sustainability" element={<Sustainability onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/company-profile" element={<CompanyProfile onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/admin" element={<AdminPortal />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+
+      {/* Global Footer (Hidden on Admin) */}
+      {!isAdmin && <Footer onOpenEnquiry={handleOpenEnquiry} />}
+
+      {/* Mobile Sticky Action Bar (Hidden on Admin) */}
+      {!isAdmin && <MobileStickyBar onOpenEnquiry={handleOpenEnquiry} />}
+
+      {/* Reusable Interactive Enquiry Modal */}
+      <EnquiryModal
+        isOpen={enquiryModalOpen}
+        onClose={() => setEnquiryModalOpen(false)}
+        defaultProduct={enquiryDefaultCategory}
+      />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col bg-ivory text-charcoal font-sans antialiased selection:bg-gold selection:text-forest-dark">
-        {/* Main Sticky Header */}
-        <Header onOpenEnquiry={handleOpenEnquiry} />
-
-        {/* Page Viewports */}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="/about" element={<About onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="/farm" element={<OurFarm onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="/products" element={<Products onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="/sustainability" element={<Sustainability onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/company-profile" element={<CompanyProfile onOpenEnquiry={handleOpenEnquiry} />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-
-        {/* Global Footer */}
-        <Footer onOpenEnquiry={handleOpenEnquiry} />
-
-        {/* Mobile Sticky Action Bar */}
-        <MobileStickyBar onOpenEnquiry={handleOpenEnquiry} />
-
-        {/* Reusable Interactive Enquiry Modal */}
-        <EnquiryModal
-          isOpen={enquiryModalOpen}
-          onClose={() => setEnquiryModalOpen(false)}
-          defaultProduct={enquiryDefaultCategory}
-        />
-      </div>
+      <AppContent />
     </Router>
   );
 }
+

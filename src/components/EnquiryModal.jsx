@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Send, CheckCircle2, AlertCircle, Phone, MessageSquare } from "lucide-react";
+import { X, Send, CheckCircle2, AlertCircle, Phone, MessageSquare, Tag } from "lucide-react";
 import { COMPANY } from "../data/companyData";
 
 export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" }) {
@@ -14,6 +14,8 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // 'idle' | 'submitting' | 'success' | 'error'
+  const [referenceId, setReferenceId] = useState("");
+  const [serverError, setServerError] = useState("");
 
   if (!isOpen) return null;
 
@@ -24,7 +26,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     }
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required";
-    } else if (!/^[0-9+\-\s]{8,15}$/.test(formData.phone.trim())) {
+    } else if (!/^[0-9+\-\s()]{8,18}$/.test(formData.phone.trim())) {
       errs.phone = "Please enter a valid phone number";
     }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
@@ -43,6 +45,9 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: null }));
     }
+    if (serverError) {
+      setServerError("");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -50,17 +55,36 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     if (!validate()) return;
 
     setStatus("submitting");
+    setServerError("");
 
-    // Isolated Submission Handler: Connect to backend or webhook here
     try {
-      // Simulating a real backend dispatch
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          requirement: formData.interestedIn,
+          quantity: formData.quantity,
+          message: formData.message,
+          source: "Website Modal"
+        })
+      });
 
-      // In production, payload would be sent to your endpoint:
-      // await fetch('/api/enquiry', { method: 'POST', body: JSON.stringify(formData) });
-      
-      setStatus("success");
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setReferenceId(data.referenceId);
+        setStatus("success");
+      } else {
+        setServerError(data.error || "Sorry, we couldn't submit your inquiry right now. Please try again.");
+        setStatus("error");
+      }
     } catch {
+      setServerError("Sorry, we couldn't submit your inquiry right now. Please try again.");
       setStatus("error");
     }
   };
@@ -76,6 +100,8 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     });
     setErrors({});
     setStatus("idle");
+    setReferenceId("");
+    setServerError("");
     onClose();
   };
 
@@ -111,33 +137,38 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
         {/* Content */}
         <div className="p-5 sm:p-6 overflow-y-auto flex-1">
           {status === "success" ? (
-            <div className="py-8 text-center space-y-4">
+            <div className="py-8 text-center space-y-5">
               <div className="w-16 h-16 rounded-full bg-agri/15 text-agri mx-auto flex items-center justify-center">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-forest">
-                Thank you for contacting VARSHA AGRO.
-              </h3>
-              <p className="text-sm text-charcoal/80 max-w-sm mx-auto">
-                We will get back to you shortly regarding your enquiry for <strong>{formData.interestedIn}</strong>.
-              </p>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href={`https://wa.me/919011601055?text=Hello%20VARSHA%20AGRO%2C%20I%20have%20submitted%20an%20enquiry%20for%20${encodeURIComponent(
-                    formData.interestedIn
-                  )}.`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] text-white text-xs font-bold hover:bg-[#20b858] transition-colors"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Follow Up via WhatsApp</span>
-                </a>
+              <div className="space-y-2">
+                <h3 className="font-serif text-2xl font-bold text-forest">
+                  Thank you for contacting VARSHA AGRO.
+                </h3>
+                <p className="text-sm text-charcoal/85 max-w-sm mx-auto leading-relaxed">
+                  Your inquiry has been received successfully. Our team will review your request.
+                </p>
+              </div>
 
+              {/* Inquiry Reference ID Badge */}
+              <div className="p-4 rounded-xl bg-forest/5 border border-gold/40 max-w-sm mx-auto flex flex-col items-center justify-center">
+                <div className="flex items-center gap-1.5 text-xs text-agri font-semibold uppercase tracking-wider">
+                  <Tag className="w-3.5 h-3.5 text-gold" />
+                  <span>Inquiry Reference</span>
+                </div>
+                <div className="font-mono text-xl font-bold text-forest mt-1 tracking-wider selection:bg-gold">
+                  {referenceId || "VA-CONFIRMED"}
+                </div>
+                <span className="text-[11px] text-charcoal/60 mt-1">
+                  Please retain this reference for your records.
+                </span>
+              </div>
+
+              <div className="pt-3 flex justify-center">
                 <button
                   onClick={handleReset}
-                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-forest text-white text-xs font-semibold hover:bg-forest-light transition-colors"
+                  className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-forest text-white text-xs font-semibold uppercase tracking-wider hover:bg-forest-light transition-colors shadow-sm"
                 >
                   Close Window
                 </button>
@@ -146,9 +177,9 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
           ) : (
             <form onSubmit={handleSubmit} noValidate className="space-y-4 text-left">
               {status === "error" && (
-                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>There was an issue sending your enquiry. Please call us directly.</span>
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                  <span>{serverError || "Sorry, we couldn't submit your inquiry right now. Please try again."}</span>
                 </div>
               )}
 
@@ -224,7 +255,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   onChange={handleChange}
                   className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-gold"
                 >
-                  <option value="Eggs">Fresh Eggs (Table Eggs)</option>
+                  <option value="Fresh Eggs">Fresh Eggs (Table Eggs)</option>
                   <option value="Layer Birds">Layer Poultry Birds</option>
                   <option value="Poultry Manure">Poultry Manure (Organic Fertilizer)</option>
                   <option value="Business Enquiry">Business / Partnership Enquiry</option>
@@ -256,10 +287,10 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
                   className="w-full py-3.5 px-6 rounded-lg bg-gold hover:bg-gold-light text-forest-dark font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-glow-gold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {status === "submitting" ? (
-                    <span>SENDING ENQUIRY...</span>
+                    <span>SENDING INQUIRY...</span>
                   ) : (
                     <>
-                      <span>SEND ENQUIRY →</span>
+                      <span>SEND INQUIRY →</span>
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}
