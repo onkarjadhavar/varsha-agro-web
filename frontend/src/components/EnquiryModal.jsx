@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, Send, CheckCircle2, AlertCircle, Phone, MessageSquare, Tag } from "lucide-react";
 import { COMPANY } from "../data/companyData";
+import { apiFetch } from "../lib/api";
 
 export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" }) {
   const [formData, setFormData] = useState({
@@ -116,7 +117,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultProduct = "Eggs" 
     setServerError("");
 
     try {
-      const response = await fetch("/api/inquiries", {
+      const response = await apiFetch("/api/inquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

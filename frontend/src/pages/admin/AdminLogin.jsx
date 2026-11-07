@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, User, AlertCircle, ArrowRight, ArrowLeft, ShieldCheck } from "lucide-react";
+import { apiFetch } from "../../lib/api";
 
 export default function AdminLogin({ onLoginSuccess }) {
   const [identifier, setIdentifier] = useState("");
@@ -19,7 +20,7 @@ export default function AdminLogin({ onLoginSuccess }) {
     setError("");
 
     try {
-      const response = await fetch("/api/admin/login", {
+      const response = await apiFetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

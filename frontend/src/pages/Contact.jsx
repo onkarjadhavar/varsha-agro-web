@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { apiFetch } from "../lib/api";
 import {
   Phone,
   Mail,
@@ -73,7 +74,7 @@ export default function Contact() {
     setServerError("");
 
     try {
-      const response = await fetch("/api/inquiries", {
+      const response = await apiFetch("/api/inquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

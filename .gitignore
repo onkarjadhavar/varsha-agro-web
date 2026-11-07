@@ -17,9 +17,9 @@ dist-ssr
 *.db
 *.db-*
 *.sqlite
-server/data/*.db*
-server/data/*.sqlite*
-!server/data/.gitkeep
+backend/data/*.db*
+backend/data/*.sqlite*
+!backend/data/.gitkeep
 /data/
 
 # Editor directories and files

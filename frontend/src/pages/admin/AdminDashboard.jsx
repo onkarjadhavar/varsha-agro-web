@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { apiFetch } from "../../lib/api";
 import {
   Search,
   RefreshCw,
@@ -58,8 +59,8 @@ export default function AdminDashboard({ user, token, onLogout }) {
         if (selectedStatus !== "ALL") params.append("status", selectedStatus);
 
         const [inquiriesRes, statsRes] = await Promise.all([
-          fetch(`/api/admin/inquiries?${params.toString()}`, { headers: authHeader() }),
-          fetch("/api/admin/stats", { headers: authHeader() })
+          apiFetch(`/api/admin/inquiries?${params.toString()}`, { headers: authHeader() }),
+          apiFetch("/api/admin/stats", { headers: authHeader() })
         ]);
 
         if (inquiriesRes.status === 401 || statsRes.status === 401) {
@@ -99,7 +100,7 @@ export default function AdminDashboard({ user, token, onLogout }) {
   const handleStatusChange = async (id, newStatus) => {
     setActionLoading(true);
     try {
-      const res = await fetch(`/api/admin/inquiries/${id}/status`, {
+      const res = await apiFetch(`/api/admin/inquiries/${id}/status`, {
         method: "PATCH",
         headers: authHeader(),
         body: JSON.stringify({ status: newStatus })
@@ -120,7 +121,7 @@ export default function AdminDashboard({ user, token, onLogout }) {
           setActiveInquiry((prev) => ({ ...prev, status: newStatus }));
         }
         // Refresh stats
-        fetch("/api/admin/stats", { headers: authHeader() })
+        apiFetch("/api/admin/stats", { headers: authHeader() })
           .then((r) => r.json())
           .then((d) => d.success && setStats(d.stats));
       }
@@ -137,7 +138,7 @@ export default function AdminDashboard({ user, token, onLogout }) {
     setActionLoading(true);
 
     try {
-      const res = await fetch(`/api/admin/inquiries/${inquiryToDelete.id}`, {
+      const res = await apiFetch(`/api/admin/inquiries/${inquiryToDelete.id}`, {
         method: "DELETE",
         headers: authHeader()
       });
@@ -155,7 +156,7 @@ export default function AdminDashboard({ user, token, onLogout }) {
         }
         setInquiryToDelete(null);
         // Refresh stats
-        fetch("/api/admin/stats", { headers: authHeader() })
+        apiFetch("/api/admin/stats", { headers: authHeader() })
           .then((r) => r.json())
           .then((d) => d.success && setStats(d.stats));
       }
@@ -169,7 +170,7 @@ export default function AdminDashboard({ user, token, onLogout }) {
   // Export CSV handler
   const handleExportCSV = async () => {
     try {
-      const res = await fetch("/api/admin/export/csv", {
+      const res = await apiFetch("/api/admin/export/csv", {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error("Export failed");

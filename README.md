@@ -18,6 +18,15 @@
 
 ## 🏗️ Architecture & Technology Stack
 
+The application is split into two independently deployable services:
+
+- **Frontend**: [frontend/](./frontend/) — React/Vite SPA deployed from Vercel.
+- **Backend**: [backend/](./backend/) — Express API and data services deployed from Render.
+
+The frontend reads `VITE_API_URL` at build time. For local development, leave it
+empty and Vite proxies `/api` requests to `localhost:5000`. For Vercel, set it
+to the public Render URL, for example `https://varsha-agro-api.onrender.com`.
+
 | Layer | Technologies | Purpose |
 |---|---|---|
 | **Frontend Client** | React 19, React Router 7, Vite 8 | Ultra-fast responsive SPA with native SEO `<title>`/`<meta>` |
@@ -78,22 +87,13 @@ npm run dev
 
 ---
 
-## ☁️ Deployment Guide (Render)
+## ☁️ Deployment Guide (Render + Vercel)
 
-VARSHA AGRO is built to run smoothly as a unified **Render Web Service**.
-
-### Render Configuration Settings
-1. **Environment**: Node
-2. **Build Command**:
-   ```bash
-   npm install && npm run build
-   ```
-3. **Start Command**:
-   ```bash
-   npm start
-   ```
-4. **Environment Variables**:
-   Add the variables listed in `.env.example` to your Render service environment settings:
+### Backend on Render
+1. Create a Render Web Service from this repository and set **Root Directory** to `backend`.
+2. Use `npm install` as the build command and `npm start` as the start command.
+3. Set `FRONTEND_URL` and `ALLOWED_ORIGINS` to the deployed Vercel URL.
+4. Add the backend variables listed in [backend/.env.example](./backend/.env.example):
    - `NODE_ENV`: `production`
    - `PORT`: `10000` (Render sets this automatically)
    - `ADMIN_INITIAL_PASSWORD`: Set a secure initial password
@@ -102,12 +102,18 @@ VARSHA AGRO is built to run smoothly as a unified **Render Web Service**.
 5. **Persistent Disk (Optional)**:
    If attaching a Render Persistent Disk, mount it at `/var/data` and add:
    - `PERSISTENT_DATA_DIR`: `/var/data`
-6. **Preventing Free-Tier Sleep (Keep-Alive)**:
+5. **Preventing Free-Tier Sleep (Keep-Alive)**:
    Add a free uptime check on [UptimeRobot.com](https://uptimerobot.com) or [cron-job.org](https://cron-job.org) hitting:
    ```
    https://varsha-agro.onrender.com/api/health
    ```
    every 10 minutes. This guarantees the instance stays awake with zero cold-start delay for visitors!
+
+### Frontend on Vercel
+1. Import the repository into Vercel and set **Root Directory** to `frontend`.
+2. Vercel automatically uses `npm run build` and publishes `dist`.
+3. Add `VITE_API_URL` with the public Render backend URL.
+4. Redeploy after setting the environment variable so it is included in the client build.
 
 ---
 

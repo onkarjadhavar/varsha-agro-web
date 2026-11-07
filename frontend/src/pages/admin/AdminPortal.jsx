@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminLogin from "./AdminLogin";
 import AdminDashboard from "./AdminDashboard";
+import { apiFetch } from "../../lib/api";
 
 export default function AdminPortal() {
   const [token, setToken] = useState(() => localStorage.getItem("va_admin_token"));
@@ -19,7 +20,7 @@ export default function AdminPortal() {
     if (!savedToken) return;
 
     // Verify token with backend
-    fetch("/api/admin/me", {
+    apiFetch("/api/admin/me", {
       headers: {
         Authorization: `Bearer ${savedToken}`
       }
@@ -54,7 +55,7 @@ export default function AdminPortal() {
   const handleLogout = async () => {
     try {
       if (token) {
-        await fetch("/api/admin/logout", {
+        await apiFetch("/api/admin/logout", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`

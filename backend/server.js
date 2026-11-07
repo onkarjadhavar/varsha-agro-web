@@ -4,9 +4,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import path from "node:path";
-import fs from "node:fs";
-import { fileURLToPath } from "node:url";
 import {
   createInquiry,
   getAllInquiries,
@@ -19,9 +16,6 @@ import {
   verifySessionToken,
   revokeSession
 } from "./db.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -65,8 +59,17 @@ const allowedOrigins = [
   "https://varsha-agro.onrender.com"
 ];
 
-if (process.env.ADDITIONAL_ORIGINS) {
-  process.env.ADDITIONAL_ORIGINS.split(",").forEach((o) => allowedOrigins.push(o.trim()));
+const configuredOrigins = process.env.ALLOWED_ORIGINS || process.env.ADDITIONAL_ORIGINS;
+if (configuredOrigins) {
+  configuredOrigins.split(",").forEach((origin) => {
+    const trimmedOrigin = origin.trim();
+    if (trimmedOrigin && !allowedOrigins.includes(trimmedOrigin)) {
+      allowedOrigins.push(trimmedOrigin);
+    }
+  });
+}
+if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
 // Strict CORS Configuration
@@ -422,49 +425,6 @@ app.get("/api/admin/export/json", requireAdminAuth, async (req, res) => {
     console.error("[JSON EXPORT ERROR]", err);
     return res.status(500).json({ error: "Failed to export JSON." });
   }
-});
-
-// ==========================================
-// PRODUCTION CLIENT ASSET SERVING & SPA FALLBACK ROUTING
-// ==========================================
-
-const distPath = path.join(__dirname, "..", "dist");
-
-// Serve static assets with caching headers
-app.use(
-  express.static(distPath, {
-    maxAge: "1d",
-    setHeaders: (res, filePath) => {
-      // Immutable cache for fingerprinted vite build assets
-      if (filePath.includes(`${path.sep}assets${path.sep}`)) {
-        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-      }
-    }
-  })
-);
-
-// Catch-all route for SPA navigation (Express 5 compatible: ensures /products, /gallery, /about, deep links never 404)
-app.use((req, res, next) => {
-  if (req.method !== "GET" || req.path.startsWith("/api")) {
-    return next();
-  }
-
-  const indexPath = path.join(distPath, "index.html");
-  if (fs.existsSync(indexPath)) {
-    return res.sendFile(indexPath);
-  }
-
-  return res.status(200).send(`
-    <!DOCTYPE html>
-    <html>
-      <head><title>VARSHA AGRO Server Running</title></head>
-      <body style="font-family: sans-serif; padding: 40px; text-align: center;">
-        <h2>VARSHA AGRO Backend Service Active</h2>
-        <p>Frontend production bundle not yet generated. Run <code>npm run build</code> to produce client dist assets.</p>
-        <p><a href="/api/health">Check Health Status &rarr;</a></p>
-      </body>
-    </html>
-  `);
 });
 
 app.listen(PORT, "0.0.0.0", () => {
