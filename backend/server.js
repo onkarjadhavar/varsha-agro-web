@@ -56,7 +56,8 @@ const allowedOrigins = [
   "http://127.0.0.1:5000",
   "https://varshaagro.com",
   "https://www.varshaagro.com",
-  "https://varsha-agro.onrender.com"
+  "https://varsha-agro.onrender.com",
+  "https://varsha-agro-web.vercel.app"
 ];
 
 const configuredOrigins = process.env.ALLOWED_ORIGINS || process.env.ADDITIONAL_ORIGINS;
